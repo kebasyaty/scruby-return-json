@@ -40,7 +40,7 @@
 ## Installation
 
 ```shell
-uv add scruby_return_json
+uv add scruby-return-json
 ```
 
 ## Usage
