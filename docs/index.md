@@ -8,7 +8,7 @@
     </a>
   </p>
   <p>
-    <h3>Plugin for Scruby - In search methods, returns results in the form of dictionaries.</h3>
+    <h3>Plugin for Scruby - In search methods, returns result as json string.</h3>
     <p align="center">
       <a href="https://github.com/kebasyaty/scruby-return-json/actions/workflows/test.yml" alt="Build Status"><img src="https://github.com/kebasyaty/scruby-return-json/actions/workflows/test.yml/badge.svg" alt="Build Status"></a>
       <a href="https://kebasyaty.github.io/scruby-return-json/" alt="Docs"><img src="https://img.shields.io/badge/docs-available-brightgreen.svg" alt="Docs"></a>
