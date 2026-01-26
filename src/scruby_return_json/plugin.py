@@ -35,13 +35,13 @@ class ReturnJson(ScrubyPlugin):
         hash_reduce_left: str,
         db_root: str,
         class_model: Any,
-    ) -> list[dict[str, Any]] | None:
+    ) -> list[str] | None:
         """Task for find documents.
 
         This method is for internal use.
 
         Returns:
-            List of documents or None.
+            List of documents as json strings or None.
         """
         branch_number_as_hash: str = f"{branch_number:08x}"[hash_reduce_left:]
         separated_hash: str = "/".join(list(branch_number_as_hash))
@@ -53,21 +53,21 @@ class ReturnJson(ScrubyPlugin):
                 "leaf.json",
             ),
         )
-        docs: list[dict[str, Any]] = []
+        docs: list[str] = []
         if await leaf_path.exists():
             data_json: bytes = await leaf_path.read_bytes()
             data: dict[str, str] = orjson.loads(data_json) or {}
             for _, val in data.items():
                 doc = class_model.model_validate_json(val)
                 if filter_fn(doc):
-                    docs.append(doc.model_dump())
+                    docs.append(val)
         return docs or None
 
     @final
     async def find_one(
         self,
         filter_fn: Callable,
-    ) -> dict[str, Any] | None:
+    ) -> str | None:
         """Asynchronous method for find one document matching the filter.
 
         Attention:
@@ -78,7 +78,7 @@ class ReturnJson(ScrubyPlugin):
             filter_fn (Callable): A function that execute the conditions of filtering.
 
         Returns:
-            Document or None.
+            One document as json string or None.
         """
         # Get Scruby instance
         scruby_self = self.scruby_self()
@@ -110,7 +110,7 @@ class ReturnJson(ScrubyPlugin):
         filter_fn: Callable = lambda _: True,
         limit_docs: int = 100,
         page_number: int = 1,
-    ) -> list[dict[str, Any]] | None:
+    ) -> list[str] | None:
         """Asynchronous method for find many documents matching the filter.
 
         Attention:
@@ -125,7 +125,7 @@ class ReturnJson(ScrubyPlugin):
                                Number of documents per page = limit_docs.
 
         Returns:
-            List of documents or None.
+            List of documents as json strings or None.
         """
         # The `page_number` parameter must not be less than one
         assert page_number > 0, "`find_many` => The `page_number` parameter must not be less than one."
@@ -139,7 +139,7 @@ class ReturnJson(ScrubyPlugin):
         class_model: Any = scruby_self._class_model
         counter: int = 0
         number_docs_skippe: int = limit_docs * (page_number - 1) if page_number > 1 else 0
-        result: list[dict[str, Any]] = []
+        result: list[str] = []
         # Run quantum loop
         with concurrent.futures.ThreadPoolExecutor(scruby_self._max_workers) as executor:
             for branch_number in branch_numbers:
