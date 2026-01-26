@@ -1,4 +1,4 @@
-# Scruby-Return-Json - In search methods, returns results in the form of json string.
+# Scruby-Return-Json - In search methods, returns result as json string.
 # Copyright (c) 2026 Gennady Kostyunin
 # SPDX-License-Identifier: MIT
 """Scruby-Return-Json Plugin."""
@@ -21,7 +21,7 @@ from scruby_plugin import ScrubyPlugin
 class ReturnJson(ScrubyPlugin):
     """Scruby-Return-Json Plugin.
 
-    In search methods, returns results in the form of json string.
+    In search methods, returns result as json string.
     """
 
     def __init__(self, scruby_self: Scruby) -> None:  # noqa: D107
