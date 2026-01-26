@@ -2,19 +2,17 @@
 
 from __future__ import annotations
 
-from typing import Any
-
 import pytest
 from pydantic import Field
 from scruby import Scruby, ScrubyModel, ScrubySettings
 
-from scruby_return_dict import ReturnDict
+from scruby_return_json import ReturnJson
 
 pytestmark = pytest.mark.asyncio(loop_scope="module")
 
 # Plugins connection.
 ScrubySettings.plugins = [
-    ReturnDict,
+    ReturnJson,
 ]
 
 
@@ -55,21 +53,21 @@ class TestPositive:
             )
             await car_coll.add_doc(car)
         # Find a car
-        car_dict: dict[str, Any] | None = await car_coll.plugins.returnDict.find_one(
+        car_json: str | None = await car_coll.plugins.returnJson.find_one(
             filter_fn=lambda doc: doc.brand == "Mazda",
         )
 
-        assert car_dict is not None
-        assert isinstance(car_dict, dict)
-        assert car_dict["brand"] == "Mazda"
+        assert car_json is not None
+        assert isinstance(car_json, str)
+        assert Car.model_validate_json(car_json).brand == "Mazda"
 
-        car_2_dict: dict[str, Any] | None = await car_coll.plugins.returnDict.find_one(
+        car_2_json: str | None = await car_coll.plugins.returnJson.find_one(
             filter_fn=lambda doc: doc.brand == "Mazda" and doc.model == "EZ-6 9",
         )
 
-        assert car_2_dict is not None
-        assert isinstance(car_2_dict, dict)
-        assert car_2_dict["model"] == "EZ-6 9"
+        assert car_2_json is not None
+        assert isinstance(car_2_json, str)
+        assert Car.model_validate_json(car_2_json).model == "EZ-6 9"
         #
         # Delete DB.
         Scruby.napalm()
@@ -92,29 +90,29 @@ class TestPositive:
             )
             await car_coll.add_doc(car)
         # Find a car
-        car_list: list[dict[str, Any]] | None = await car_coll.plugins.returnDict.find_many()
+        car_list: list[str] | None = await car_coll.plugins.returnJson.find_many()
 
         assert car_list is not None
         assert isinstance(car_list, list)
         assert len(car_list) == 9
-        assert car_list[0]["brand"] == "Mazda"
+        assert Car.model_validate_json(car_list[0]).brand == "Mazda"
 
-        car_2_list: list[dict[str, Any]] | None = await car_coll.plugins.returnDict.find_many(
+        car_2_list: list[str] | None = await car_coll.plugins.returnJson.find_many(
             filter_fn=lambda doc: doc.brand == "Mazda",
         )
 
         assert car_2_list is not None
         assert isinstance(car_2_list, list)
         assert len(car_2_list) == 9
-        assert car_2_list[0]["brand"] == "Mazda"
+        assert Car.model_validate_json(car_2_list[0]).brand == "Mazda"
 
-        car_3_list: list[dict[str, Any]] | None = await car_coll.plugins.returnDict.find_many(
+        car_3_list: list[str] | None = await car_coll.plugins.returnJson.find_many(
             filter_fn=lambda doc: doc.brand == "Mazda" and doc.model == "EZ-6 9",
         )
 
         assert car_3_list is not None
         assert isinstance(car_3_list, list)
-        assert car_3_list[0]["model"] == "EZ-6 9"
+        assert Car.model_validate_json(car_3_list[0]).model == "EZ-6 9"
         #
         # Delete DB.
         Scruby.napalm()
