@@ -1,8 +1,8 @@
 site_name: Scruby-Return-Dict Docs
 site_description: "Plugin for Scruby - In search methods, returns results in the form of dictionaries."
 site_url: https://kebasyaty.github.io/scruby-return-dict/
-site_author: Kebasyaty
-copyright: Copyright &copy; 2026 Maintained by <a href="https://github.com/kebasyaty">Kebasyaty</a>
+site_author: kebasyaty
+copyright: Copyright &copy; 2026 Maintained by <a href="https://github.com/kebasyaty">kebasyaty</a>
 repo_name: kebasyaty/scruby-return-dict
 repo_url: https://github.com/kebasyaty/scruby-return-dict
 
